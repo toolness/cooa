@@ -44,6 +44,33 @@ var COOA = (function() {
     update();
   }
 
+  function initEditorFixups() {
+    // We might be in jsbin or thimble or another two-pane editor,
+    // which often handle named anchors poorly, so we'll handle
+    // them ourselves.
+    parent.addEventListener('click', function(e) {
+      if (e.target.nodeName == 'A') {
+        var href = e.target.getAttribute('href');
+
+        if (!(href && href[0] == '#')) return;
+        showSection(href.slice(1));
+        storage.set('cooa-section', href.slice(1));
+        e.preventDefault();
+      }
+    }, true);
+
+    // Two-pane editors don't always retain scroll position, so we'll
+    // do that ourselves too.
+    window.addEventListener('load', function() {
+      scrollTo(0, storage.get('cooa-scroll') || 0);
+      setInterval(function() {
+        storage.set('cooa-scroll', window.pageYOffset);
+      }, 1000);
+    }, false);
+
+    showSection(storage.get('cooa-section') || '');
+  }
+
   function init() {
     parent = document.querySelector('.cooa');
     if (!parent) return;
@@ -52,33 +79,7 @@ var COOA = (function() {
     window.addEventListener('hashchange', showCurrentSection, false);
     showCurrentSection();
     highlightBrokenLinks();
-
-    if (window.parent !== window) {
-      // We might be in jsbin or thimble or another two-pane editor,
-      // which often handle named anchors poorly, so we'll handle
-      // them ourselves.
-      parent.addEventListener('click', function(e) {
-        if (e.target.nodeName == 'A') {
-          var href = e.target.getAttribute('href');
-
-          if (!(href && href[0] == '#')) return;
-          showSection(href.slice(1));
-          storage.set('cooa-section', href.slice(1));
-          e.preventDefault();
-        }
-      }, true);
-
-      // Two-pane editors don't always retain scroll position, so we'll
-      // do that ourselves too.
-      window.addEventListener('load', function() {
-        scrollTo(0, storage.get('cooa-scroll') || 0);
-        setInterval(function() {
-          storage.set('cooa-scroll', window.pageYOffset);
-        }, 1000);
-      }, false);
-
-      showSection(storage.get('cooa-section') || '');
-    }
+    if (window.parent !== window) initEditorFixups();
   }
 
   var parent;
