@@ -1,12 +1,12 @@
 var COOA = (function() {
   function $(selector) {
     try {
-      return document.querySelector(selector);
+      return parent.querySelector(selector);
     } catch (e) { return null; }
   };
 
   function highlightBrokenLinks() {
-    var links = document.querySelectorAll('a[href^="#"]');
+    var links = parent.querySelectorAll('a[href^="#"]');
     var link, sectionName;
 
     for (var i = 0; i < links.length; i++) {
@@ -30,13 +30,15 @@ var COOA = (function() {
   function processDebugCheckbox() {
     storage.set('cooa-debug', debugCheckbox.checked);
     if (debugCheckbox.checked)
-      $('body').classList.add('cooa-debug');
+      parent.classList.add('cooa-debug');
     else
-      $('body').classList.remove('cooa-debug');
+      parent.classList.remove('cooa-debug');
   };
 
   function init() {
-    debugCheckbox = $('input#cooa-debug[type=checkbox]');
+    debugCheckbox = document.querySelector('input#cooa-debug[type=checkbox]');
+    parent = document.querySelector('.cooa');
+    if (!parent) return;
 
     if (debugCheckbox) {
       debugCheckbox.checked = !!storage.get('cooa-debug');
@@ -51,7 +53,7 @@ var COOA = (function() {
       // We might be in jsbin or thimble or another two-pane editor,
       // which often handle named anchors poorly, so we'll handle
       // them ourselves.
-      document.addEventListener('click', function(e) {
+      parent.addEventListener('click', function(e) {
         if (e.target.nodeName == 'A') {
           var href = e.target.getAttribute('href');
 
@@ -75,6 +77,7 @@ var COOA = (function() {
     }
   }
 
+  var parent;
   var debugCheckbox;
   var storage = {
     set: function set(name, value) {
