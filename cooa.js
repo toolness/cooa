@@ -35,7 +35,47 @@ var COOA = (function() {
       $('body').classList.remove('cooa-debug');
   };
 
-  var debugCheckbox = $('input#cooa-debug[type=checkbox]');
+  function init() {
+    debugCheckbox = $('input#cooa-debug[type=checkbox]');
+
+    if (debugCheckbox) {
+      debugCheckbox.checked = !!storage.get('cooa-debug');
+      debugCheckbox.addEventListener('change', processDebugCheckbox, false);
+      processDebugCheckbox();
+    }
+    window.addEventListener('hashchange', showCurrentSection, false);
+    showCurrentSection();
+    highlightBrokenLinks();
+
+    if (window.parent !== window) {
+      // We might be in jsbin or thimble or another two-pane editor,
+      // which often handle named anchors poorly, so we'll handle
+      // them ourselves.
+      document.addEventListener('click', function(e) {
+        if (e.target.nodeName == 'A') {
+          var href = e.target.getAttribute('href');
+
+          if (!(href && href[0] == '#')) return;
+          showSection(href.slice(1));
+          storage.set('cooa-section', href.slice(1));
+          e.preventDefault();
+        }
+      }, true);
+
+      // Two-pane editors don't always retain scroll position, so we'll
+      // do that ourselves too.
+      window.addEventListener('load', function() {
+        scrollTo(0, storage.get('cooa-scroll') || 0);
+        setInterval(function() {
+          storage.set('cooa-scroll', window.pageYOffset);
+        }, 1000);
+      }, false);
+
+      showSection(storage.get('cooa-section') || '');
+    }
+  }
+
+  var debugCheckbox;
   var storage = {
     set: function set(name, value) {
       try {
@@ -49,41 +89,7 @@ var COOA = (function() {
     }
   };
 
-  if (debugCheckbox) {
-    debugCheckbox.checked = !!storage.get('cooa-debug');
-    debugCheckbox.addEventListener('change', processDebugCheckbox, false);
-    processDebugCheckbox();
-  }
-  window.addEventListener('hashchange', showCurrentSection, false);
-  showCurrentSection();
-  highlightBrokenLinks();
-
-  if (window.parent !== window) {
-    // We might be in jsbin or thimble or another two-pane editor,
-    // which often handle named anchors poorly, so we'll handle
-    // them ourselves.
-    document.addEventListener('click', function(e) {
-      if (e.target.nodeName == 'A') {
-        var href = e.target.getAttribute('href');
-
-        if (!(href && href[0] == '#')) return;
-        showSection(href.slice(1));
-        storage.set('cooa-section', href.slice(1));
-        e.preventDefault();
-      }
-    }, true);
-
-    // Two-pane editors don't always retain scroll position, so we'll
-    // do that ourselves too.
-    window.addEventListener('load', function() {
-      scrollTo(0, storage.get('cooa-scroll') || 0);
-      setInterval(function() {
-        storage.set('cooa-scroll', window.pageYOffset);
-      }, 1000);
-    }, false);
-
-    showSection(storage.get('cooa-section') || '');
-  }
+  window.addEventListener("DOMContentLoaded", init, false);
 
   return {$: $, showSection: showSection, storage: storage};
 })();
