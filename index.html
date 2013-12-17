@@ -32,7 +32,7 @@ body {
 <h1>Choose Our Own Adventure</h1>
 <p>
   <strong>COOA</strong> is a web-based microframework that makes it
-  possible to collaboratively author hypertext narratives.
+  possible to collaboratively author and play hypertext narratives.
 </p>
 <p>
   It is optimized for development inside 
@@ -63,8 +63,20 @@ body {
 </p>
 <h2>Debug Mode</h2>
 <p>
-  <p>If you add a checkbox with id <code>cooa-debug</code> anywhere on
-    your HTML page, enabling it activates <em>debug mode</em>.</p>
-  <p>In debug mode, all sections of your story are shown at once, and the
-    currently active section is highlighted.</p>
+  If you add a checkbox with id <code>cooa-debug</code> anywhere on
+  your HTML page, enabling it activates <em>debug mode</em>.
+</p>
+<p>
+  In debug mode, all sections of your story are shown at once, and the
+  currently active section is highlighted.
+</p>
+<h2>TogetherJS Integration</h2>
+<p>
+  If you want to play a story collaboratively via TogetherJS, you can do
+  so by following the standard
+  <a href="https://togetherjs.com/docs/#quick-start">instructions</a>
+  for integration and loading
+  <a href="cooa.together.js">cooa.together.js</a> immediately
+  after <code>togetherjs-min.js</code>. See the
+  <a href="example/">example</a> for more details.
 </p>
