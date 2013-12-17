@@ -27,24 +27,28 @@ var COOA = (function() {
 
   function showCurrentSection() { showSection(location.hash.slice(1)); }
 
-  function processDebugCheckbox() {
-    storage.set('cooa-debug', debugCheckbox.checked);
-    if (debugCheckbox.checked)
-      parent.classList.add('cooa-debug');
-    else
-      parent.classList.remove('cooa-debug');
-  };
+  function initDebugCheckbox(parent, storage) {
+    function update() {
+      storage.set('cooa-debug', checkbox.checked);
+      if (checkbox.checked)
+        parent.classList.add('cooa-debug');
+      else
+        parent.classList.remove('cooa-debug');
+    };
+
+    var checkbox = document.querySelector('input#cooa-debug');
+
+    if (!checkbox) return;
+    checkbox.checked = !!storage.get('cooa-debug');
+    checkbox.addEventListener('change', update, false);
+    update();
+  }
 
   function init() {
-    debugCheckbox = document.querySelector('input#cooa-debug[type=checkbox]');
     parent = document.querySelector('.cooa');
     if (!parent) return;
 
-    if (debugCheckbox) {
-      debugCheckbox.checked = !!storage.get('cooa-debug');
-      debugCheckbox.addEventListener('change', processDebugCheckbox, false);
-      processDebugCheckbox();
-    }
+    initDebugCheckbox(parent, storage);
     window.addEventListener('hashchange', showCurrentSection, false);
     showCurrentSection();
     highlightBrokenLinks();
@@ -78,7 +82,6 @@ var COOA = (function() {
   }
 
   var parent;
-  var debugCheckbox;
   var storage = {
     set: function set(name, value) {
       try {
