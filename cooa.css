@@ -1,0 +1,11 @@
+body.cooa-debug section.cooa-active {
+  background-color: lightyellow;
+}
+
+body:not(.cooa-debug) section:not(.cooa-active) {
+  display: none;
+}
+
+a.cooa-broken {
+  color: red;
+}

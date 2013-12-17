@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+h1, h2 {
+  font-weight: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+@media (max-width: 640px) {
+  body {
+    margin: 0 12px;
+  }
+}
+
+@media (min-width: 640px) {
+  body {
+    width: 616px;
+    margin: 0 auto;
+  }
+}
+
+body {
+  line-height: 1.5em;
+  font-family: Palatino, Georgia, serif;
+}
+</style>
+<title>Choose Our Own Adventure</title>
+<h1>Choose Our Own Adventure</h1>
+<p>
+  <strong>COOA</strong> is a web-based microframework that makes it
+  possible to collaboratively author hypertext narratives.
+</p>
+<p>
+  It is optimized for development inside
+  <a href="https://thimble.webmaker.org/">Thimble</a> but can also be
+  developed within <a href="http://jsbin.com/">jsbin</a> or your favorite
+  text editor.
+</p>
+<h2>General Usage</h2>
+<ol>
+  <li>Drop <a href="cooa.css">cooa.css</a> and 
+    <a href="cooa.js">cooa.js</a> into an HTML page.</li>
+  <li>Use <code>&lt;section&gt;</code> elements to hold the individual
+    &ldquo;pages&rdquo; of your story. Give each section a unique
+    <code>id</code> attribute. By default, only the first section
+    will be shown to the user; the others will be hidden.</li>
+  <li>Link between different sections using fragment identifiers. For
+    instance, <code>&lt;a href="#foo"&gt;</code> will take a user to
+    <code>&lt;section id="foo"&gt;</code> by hiding the current
+    section and showing the <code>foo</code> section.</li>
+</ol>
+<p>
+  See the <a href="example/">example</a> for more information.
+</p>
+<h2>Debug Mode</h2>
+<p>
+  <p>If you add a checkbox with id <code>cooa-debug</code> anywhere on
+    your HTML page, enabling it activates <em>debug mode</em>.</p>
+  <p>In debug mode, all sections of your story are shown at once, and the
+    currently active section is highlighted.</p>
+</p>
