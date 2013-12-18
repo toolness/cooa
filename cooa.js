@@ -163,7 +163,7 @@ var COOA = (function() {
 
     var parent = options.parent;
     var globalParent = options.globalParent || parent;
-    var storage = options.storage;
+    var storage = options.storage || Storage({});
     var self = Events.mixin({
       $: $,
       showSection: showSection,
