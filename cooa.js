@@ -1,5 +1,5 @@
 var COOA = (function() {
-  var COOA = {story: null};
+  var COOA = {story: null, autorun: true};
 
   var Events = COOA.Events = {
     // This was lifted from Backbone.Events.
@@ -193,7 +193,7 @@ var COOA = (function() {
     };
   };
 
-  var init = function init() {
+  var init = COOA.init = function init(story) {
     function initTopLevel() {
       function showCurrentSection() {
         story.showSection(window.location.hash.slice(1));
@@ -204,6 +204,8 @@ var COOA = (function() {
     }
 
     function initEmbedded() {
+      var storage = story.storage;
+
       // We might be in jsbin or thimble or another two-pane editor,
       // which often handle named anchors poorly, so we'll handle
       // them ourselves.
@@ -225,23 +227,21 @@ var COOA = (function() {
       story.showSection(storage.get('cooa-section') || '');
     }
 
-    var parent = document.querySelector('.cooa');
-    var storage = Storage(window.sessionStorage);
-    var story;
-
-    if (!parent) return;
-
-    story = COOA.story = Story({
-      parent: parent,
-      globalParent: document.body,
-      storage: storage,
-      debugCheckbox: document.querySelector('input#cooa-debug')
-    });
-
+    COOA.story = story;
     window.parent === window ? initTopLevel() : initEmbedded();
   };
 
-  window.addEventListener("DOMContentLoaded", init, false);
+  window.addEventListener("DOMContentLoaded", function() {
+    var parent = document.querySelector('.cooa');
+
+    if (!(parent && COOA.autorun)) return;
+    init(Story({
+      parent: parent,
+      globalParent: document.body,
+      storage: Storage(window.sessionStorage),
+      debugCheckbox: document.querySelector('input#cooa-debug')
+    }));
+  }, false);
 
   return COOA;
 })();
