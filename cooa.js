@@ -1,6 +1,15 @@
 var COOA = (function() {
   var COOA = {story: null, autorun: true};
 
+  var Hash = COOA.Hash = {
+    parse: function(str) {
+      return {section: str ? str.slice(1) : ''};
+    },
+    stringify: function(obj) {
+      return '#' + obj.section;
+    }
+  };
+
   var Events = COOA.Events = {
     // This was lifted from Backbone.Events.
 
@@ -115,19 +124,20 @@ var COOA = (function() {
 
     function highlightBrokenLinks() {
       var links = parent.querySelectorAll('a[href^="#"]');
-      var link, sectionName;
+      var link, linkInfo;
 
       for (var i = 0; i < links.length; i++) {
         link = links[i];
-        sectionName = link.getAttribute('href').slice(1);
-        if (sectionName && !$('section#' + sectionName))
+        linkInfo = Hash.parse(link.getAttribute('href'));
+        if (linkInfo.section && !$('section#' + linkInfo.section))
           link.classList.add('cooa-broken');
       }
     }
 
-    function showSection(name) {
+    function showSection(info) {
+      if (!info || typeof(info) != 'object') info = Hash.parse(info);
       var oldSection = $('section.cooa-active');
-      var newSection = $('section#' + name) || $('section');
+      var newSection = $('section#' + info.section) || $('section');
 
       if (oldSection) oldSection.classList.remove('cooa-active');
       if (newSection) newSection.classList.add('cooa-active');
@@ -168,7 +178,7 @@ var COOA = (function() {
 
         if (!(href && href[0] == '#')) return;
         self.trigger('sectionchange', {
-          section: href.slice(1),
+          href: href,
           preventDefault: e.preventDefault.bind(e)
         });
       }
@@ -196,7 +206,7 @@ var COOA = (function() {
   var init = COOA.init = function init(story) {
     function initTopLevel() {
       function showCurrentSection() {
-        story.showSection(window.location.hash.slice(1));
+        story.showSection(window.location.hash);
       }
 
       window.addEventListener('hashchange', showCurrentSection, false);
@@ -210,8 +220,8 @@ var COOA = (function() {
       // which often handle named anchors poorly, so we'll handle
       // them ourselves.
       story.on('sectionchange', function(e) {
-        story.showSection(e.section);
-        storage.set('cooa-section', e.section);
+        story.showSection(e.href);
+        storage.set('cooa-hash', e.href);
         e.preventDefault();
       });
 
@@ -224,7 +234,7 @@ var COOA = (function() {
         }, 1000);
       }, false);
 
-      story.showSection(storage.get('cooa-section') || '');
+      story.showSection(storage.get('cooa-hash'));
     }
 
     COOA.story = story;
