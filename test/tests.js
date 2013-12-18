@@ -45,3 +45,14 @@ test('Showing sections works', function() {
   ok(!this.sample.querySelector('#b').classList.contains('cooa-active'));
   ok(this.sample.querySelector('#a').classList.contains('cooa-active'));  
 });
+
+test('Hash parsing works', function() {
+  deepEqual(COOA.Hash.parse('#foo'), {section: 'foo', now: {}});
+  deepEqual(COOA.Hash.parse('#foo&now.k=1'), {section: 'foo', now: {k: '1'}});
+});
+
+test('Hash stringification works', function() {
+  deepEqual(COOA.Hash.stringify({section: 'foo'}), '#foo');
+  deepEqual(COOA.Hash.stringify({section: 'foo', now: {k: '1'}}),
+            '#foo&now.k=1');
+});

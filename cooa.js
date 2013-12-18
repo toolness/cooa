@@ -3,10 +3,29 @@ var COOA = (function() {
 
   var Hash = COOA.Hash = {
     parse: function(str) {
-      return {section: str ? str.slice(1) : ''};
+      var pairs = (str ? str.slice(1) : '').split('&');
+      var obj = {section: pairs[0] || '', now: {}};
+      pairs.slice(1).forEach(function(pair) {
+        var parts = pair.split('=');
+        if (parts.length != 2) return;
+        var name = decodeURIComponent(parts[0]);
+        var nameMatch = name.match(/^now\.(.+)$/);
+        if (!nameMatch) return;
+        obj.now[nameMatch[1]] = decodeURIComponent(parts[1]);
+      });
+      return obj;
     },
     stringify: function(obj) {
-      return '#' + obj.section;
+      var nowNames = Object.keys(obj.now || {});
+      var hash = '#' + obj.section;
+
+      if (nowNames.length)
+        hash += '&' + nowNames.map(function(name) {
+          return encodeURIComponent('now.' + name) + '=' +
+                 encodeURIComponent(obj.now[name]);
+        }).join('&');
+
+      return hash;
     }
   };
 
@@ -141,6 +160,8 @@ var COOA = (function() {
 
       if (oldSection) oldSection.classList.remove('cooa-active');
       if (newSection) newSection.classList.add('cooa-active');
+      self.now = info.now || {};
+      self.next = JSON.parse(JSON.stringify(self.now));
     };
 
     function setDebugMode(enabled) {
