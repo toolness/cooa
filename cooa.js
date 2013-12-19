@@ -8,6 +8,13 @@ var COOA = (function() {
         return (href && href[0] == '#');
       }
       return false;
+    },
+    extend: function(dest) {
+      for (var i = 1; i < arguments.length; i++) {
+        var arg = arguments[i];
+        Object.keys(arg).forEach(function(key) { dest[key] = arg[key]; });
+      }
+      return dest;
     }
   };
 
@@ -36,6 +43,14 @@ var COOA = (function() {
         }).join('&');
 
       return hash;
+    },
+    update: function(hash, obj) {
+      var hashObj = Hash.parse(hash);
+
+      return Hash.stringify({
+        section: obj.section || hashObj.section,
+        now: Util.extend(hashObj.now, obj.now || {})
+      });
     }
   };
 

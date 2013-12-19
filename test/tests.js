@@ -67,6 +67,23 @@ test('Hash stringification works', function() {
             '#foo&now.k=1');
 });
 
+test('Hash.update works', function() {
+  deepEqual(COOA.Hash.update('#foo', {now: {k: '1'}}), '#foo&now.k=1');
+  deepEqual(COOA.Hash.update('#foo&now.k=2', {now: {k: '1'}}),
+            '#foo&now.k=1');
+  deepEqual(COOA.Hash.update('#foo', {section: 'lol'}), '#lol');
+});
+
+test('Util.extend works', function() {
+  var i = {a: 1};
+
+  equal(COOA.Util.extend(i), i);
+  deepEqual(COOA.Util.extend(i), {a: 1});
+  deepEqual(COOA.Util.extend({k: 1}, {u: 2}), {k: 1, u: 2});
+  deepEqual(COOA.Util.extend({k: 1}, {}, {u: 2}), {k: 1, u: 2});
+  deepEqual(COOA.Util.extend({k: 1}, {k: 2}), {k: 2});
+});
+
 test('Util.isHashLink works', function() {
   var isHashLink = COOA.Util.isHashLink;
   var hashLink = document.createElement('a');
