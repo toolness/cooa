@@ -97,7 +97,7 @@ var COOA = (function() {
 
       if (oldSection) oldSection.classList.remove('cooa-active');
       if (newSection) newSection.classList.add('cooa-active');
-      self.now = info.now || {};
+      self.now = Object.freeze(info.now || {});
       self.next = JSON.parse(JSON.stringify(self.now));
     };
 
