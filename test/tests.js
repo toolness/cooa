@@ -66,3 +66,16 @@ test('Hash stringification works', function() {
   deepEqual(COOA.Hash.stringify({section: 'foo', now: {k: '1'}}),
             '#foo&now.k=1');
 });
+
+test('Util.isHashLink works', function() {
+  var isHashLink = COOA.Util.isHashLink;
+  var hashLink = document.createElement('a');
+  var nonHashLink = document.createElement('a');
+
+  hashLink.setAttribute('href', '#foo');
+  nonHashLink.setAttribute('href', 'lol.html');
+
+  equal(isHashLink(document.body), false);
+  equal(isHashLink(hashLink), true);
+  equal(isHashLink(nonHashLink), false);
+});

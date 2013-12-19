@@ -1,6 +1,16 @@
 var COOA = (function() {
   var COOA = {story: null, autorun: true};
 
+  var Util = COOA.Util = {
+    isHashLink: function(element) {
+      if (element.nodeName == 'A') {
+        var href = element.getAttribute('href');
+        return (href && href[0] == '#');
+      }
+      return false;
+    }
+  };
+
   var Hash = COOA.Hash = {
     parse: function(str) {
       var pairs = (str ? str.slice(1) : '').split('&');
@@ -98,19 +108,14 @@ var COOA = (function() {
 
     highlightBrokenLinks();
     globalParent.addEventListener('click', function(e) {
-      if (e.target.nodeName == 'A') {
-        var href = e.target.getAttribute('href');
-        var changeEvent;
-
-        if (!(href && href[0] == '#')) return;
-        changeEvent = CustomEvent('cooasectionchange', {
-          bubbles: false,
-          cancelable: true,
-          detail: {href: href}
-        });
-        parent.dispatchEvent(changeEvent);
-        if (changeEvent.defaultPrevented) e.preventDefault();
-      }
+      if (!Util.isHashLink(e.target)) return;
+      var changeEvent = CustomEvent('cooasectionchange', {
+        bubbles: false,
+        cancelable: true,
+        detail: {href: e.target.getAttribute('href')}
+      });
+      parent.dispatchEvent(changeEvent);
+      if (changeEvent.defaultPrevented) e.preventDefault();
     }, true);
     if (options.debugCheckbox) hookupDebugCheckbox(options.debugCheckbox);
 
