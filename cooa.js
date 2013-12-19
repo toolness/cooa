@@ -9,6 +9,14 @@ var COOA = (function() {
       }
       return false;
     },
+    updateHashLink: function(element, obj) {
+      var origHref = element.getAttribute('data-orig-href');
+      if (!origHref) {
+        origHref = element.getAttribute('href');
+        element.setAttribute('data-orig-href', origHref);
+      }
+      element.setAttribute('href', Hash.update(origHref, obj));
+    },
     extend: function(dest) {
       for (var i = 1; i < arguments.length; i++) {
         var arg = arguments[i];

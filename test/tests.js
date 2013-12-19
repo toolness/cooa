@@ -96,3 +96,15 @@ test('Util.isHashLink works', function() {
   equal(isHashLink(hashLink), true);
   equal(isHashLink(nonHashLink), false);
 });
+
+test('Util.updateHashLink works', function() {
+  var hashLink = document.createElement('a');
+
+  hashLink.setAttribute('href', '#foo');
+  COOA.Util.updateHashLink(hashLink, {now: {k: '1'}});
+  equal(hashLink.getAttribute('href'), '#foo&now.k=1');
+  equal(hashLink.getAttribute('data-orig-href'), '#foo');
+  COOA.Util.updateHashLink(hashLink, {now: {k: '2'}});
+  equal(hashLink.getAttribute('href'), '#foo&now.k=2');
+  equal(hashLink.getAttribute('data-orig-href'), '#foo');
+});
