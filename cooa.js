@@ -100,6 +100,11 @@ var COOA = (function() {
       self.next = JSON.parse(JSON.stringify(self.now));
     };
 
+    function maybeUpdateLink(e) {
+      if (!Util.isHashLink(e.target)) return;
+      Util.updateHashLink(e.target, {now: self.next});
+    }
+
     function setDebugMode(enabled) {
       if (enabled)
         parent.classList.add('cooa-debug');
@@ -130,6 +135,8 @@ var COOA = (function() {
     };
 
     highlightBrokenLinks();
+    globalParent.addEventListener('mouseover', maybeUpdateLink, true);
+    globalParent.addEventListener('touchstart', maybeUpdateLink, true);
     globalParent.addEventListener('click', function(e) {
       if (!Util.isHashLink(e.target)) return;
       var changeEvent = CustomEvent('cooasectionchange', {
