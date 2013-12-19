@@ -20,6 +20,16 @@ test('Storage works', function() {
   deepEqual(storage.get('lol'), {a: now});
 });
 
+test('Storage traps exceptions', function() {
+  var storage = COOA.Storage({lol: 'wut'});
+  var cyclic = {};
+
+  cyclic.cyclic = cyclic;
+  equal(storage.get('hmmm'), null);
+  equal(storage.get('lol'), null);
+  storage.set('cyclic', cyclic);
+});
+
 test('Broken links are marked', function() {
   var nonexistentLink = this.sample.querySelector('a[href="#nonexistent"]');
   ok(!nonexistentLink.classList.contains('cooa-broken'));
