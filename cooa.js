@@ -95,10 +95,16 @@ var COOA = (function() {
       var oldSection = $('section.cooa-active');
       var newSection = $('section#' + info.section) || $('section');
 
+      if (!newSection) return;
       if (oldSection) oldSection.classList.remove('cooa-active');
-      if (newSection) newSection.classList.add('cooa-active');
+      newSection.classList.add('cooa-active');
       self.now = Object.freeze(info.now || {});
       self.next = JSON.parse(JSON.stringify(self.now));
+      newSection.dispatchEvent(CustomEvent('cooasectionshow', {
+        bubbles: true,
+        cancelable: false,
+        detail: {story: self}
+      }));
     };
 
     function maybeUpdateLink(e) {
@@ -140,7 +146,7 @@ var COOA = (function() {
     globalParent.addEventListener('touchstart', maybeUpdateLink, true);
     globalParent.addEventListener('click', function(e) {
       if (!Util.isHashLink(e.target)) return;
-      var changeEvent = CustomEvent('cooasectionchange', {
+      var changeEvent = CustomEvent('cooasectionlinkclick', {
         bubbles: false,
         cancelable: true,
         detail: {href: e.target.getAttribute('href')}
@@ -184,7 +190,7 @@ var COOA = (function() {
       // We might be in jsbin or thimble or another two-pane editor,
       // which often handle named anchors poorly, so we'll handle
       // them ourselves.
-      story.parent.addEventListener('cooasectionchange', function(e) {
+      story.parent.addEventListener('cooasectionlinkclick', function(e) {
         story.showSection(e.detail.href);
         storage.set('cooa-hash', e.detail.href);
         e.preventDefault();
