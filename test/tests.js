@@ -107,4 +107,9 @@ test('Util.updateHashLink works', function() {
   COOA.Util.updateHashLink(hashLink, {now: {k: '2'}});
   equal(hashLink.getAttribute('href'), '#foo&now.k=2');
   equal(hashLink.getAttribute('data-orig-href'), '#foo');
+
+  var resetLink = document.createElement('a');
+  resetLink.setAttribute('href', '#');
+  COOA.Util.updateHashLink(resetLink, {now: {k: '1'}});
+  equal(resetLink.getAttribute('href'), '#');
 });

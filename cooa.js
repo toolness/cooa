@@ -15,6 +15,7 @@ var COOA = (function() {
         origHref = element.getAttribute('href');
         element.setAttribute('data-orig-href', origHref);
       }
+      if (origHref == '#') return;
       element.setAttribute('href', Hash.update(origHref, obj));
     },
     extend: function(dest) {
