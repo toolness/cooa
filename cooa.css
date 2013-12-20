@@ -6,6 +6,14 @@
   display: none;
 }
 
+.cooa.cooa-debug .cooa-hidden {
+  opacity: 0.5;
+}
+
+.cooa:not(.cooa-debug) .cooa-hidden {
+  display: none;
+}
+
 .cooa a.cooa-broken {
   color: red;
 }

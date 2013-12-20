@@ -7,10 +7,13 @@
     return 'av.' + sectionID;
   }
 
-  function setVisitedVisibility(story, section) {
-    findAll(section, '[data-show-if-visited]').forEach(function(el) {
+  function setVisitedVisibility(story) {
+    findAll(story.parent, '[data-show-if-visited]').forEach(function(el) {
       var sectionID = el.getAttribute('data-show-if-visited');
-      el.style.display = story.now[varName(sectionID)] == 'on' ? '' : 'none';
+      if (story.now[varName(sectionID)] == 'on')
+        el.classList.remove('cooa-hidden');
+      else
+        el.classList.add('cooa-hidden');
     });
   }
 
@@ -22,7 +25,7 @@
     var story = e.detail.story;
     var sectionID = e.target.id;
 
-    setVisitedVisibility(story, e.target);
+    setVisitedVisibility(story);
 
     if (shouldSectionBeTracked(sectionID, story.parent))
       story.next[varName(sectionID)] = 'on';
