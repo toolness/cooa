@@ -10,10 +10,8 @@
   function setVisitedVisibility(story) {
     findAll(story.parent, '[data-show-if-visited]').forEach(function(el) {
       var sectionID = el.getAttribute('data-show-if-visited');
-      if (story.now[varName(sectionID)] == 'on')
-        el.classList.remove('cooa-hidden');
-      else
-        el.classList.add('cooa-hidden');
+      COOA.Util.setClass(el, 'cooa-hidden',
+                         story.now[varName(sectionID)] != 'on');
     });
   }
 

@@ -2,6 +2,15 @@ var COOA = (function() {
   var COOA = {story: null, autorun: true};
 
   var Util = COOA.Util = {
+    setClass: function(element, className, enabled) {
+      // We would just use classList.toggle(), but IE doesn't pay attention
+      // to its second argument.
+      if (typeof(enabled) == 'undefined') enabled = true;
+      if (enabled)
+        element.classList.add(className);
+      else
+        element.classList.remove(className);
+    },
     isHashLink: function(element) {
       if (element.nodeName == 'A') {
         var href = element.getAttribute('href');
@@ -113,10 +122,7 @@ var COOA = (function() {
     }
 
     function setDebugMode(enabled) {
-      if (enabled)
-        parent.classList.add('cooa-debug');
-      else
-        parent.classList.remove('cooa-debug');
+      Util.setClass(parent, 'cooa-debug', enabled);
     }
 
     function hookupDebugCheckbox(checkbox) {

@@ -97,6 +97,20 @@ test('Util.isHashLink works', function() {
   equal(isHashLink(nonHashLink), false);
 });
 
+test('Util.setClass works', function() {
+  var setClass = COOA.Util.setClass;
+  var el = document.createElement('div');
+
+  setClass(el, 'lol');
+  ok(el.classList.contains('lol'));
+
+  setClass(el, 'lol', true);
+  ok(el.classList.contains('lol'));
+
+  setClass(el, 'lol', false);
+  ok(!el.classList.contains('lol'));
+});
+
 test('Util.updateHashLink works', function() {
   var hashLink = document.createElement('a');
 
