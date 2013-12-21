@@ -38,17 +38,40 @@ test('Broken links are marked', function() {
 });
 
 test('Debug mode works', function() {
+  var eventTriggered = 0;
+
+  this.sample.addEventListener('cooadebugmodechange', function(e) {
+    eventTriggered++;
+  }, false);
+
   var story = COOA.Story({parent: this.sample});
+
+  equal(story.debugMode, false);
+  equal(eventTriggered, 1);
   ok(!this.sample.classList.contains('cooa-debug'));
   story.setDebugMode(true);
+  equal(eventTriggered, 2);
+  equal(story.debugMode, true);
   ok(this.sample.classList.contains('cooa-debug'));
   story.setDebugMode(false);
+  equal(eventTriggered, 3);
   ok(!this.sample.classList.contains('cooa-debug'));
+});
+
+asyncTest('Story init event works', function() {
+  expect(0);
+  this.sample.addEventListener('cooainit', function(e) {
+    setTimeout(start, 0);
+  }, false);
+
+  COOA.Story({parent: this.sample});
 });
 
 test('Showing sections works', function() {
   var story = COOA.Story({parent: this.sample});
+  equal(story.activeSection, null);
   story.showSection('#b');
+  equal(story.activeSection.id, 'b');
   ok(this.sample.querySelector('#b').classList.contains('cooa-active'));
   ok(!this.sample.querySelector('#a').classList.contains('cooa-active'));
   story.showSection('#a');

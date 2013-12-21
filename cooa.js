@@ -123,6 +123,11 @@ var COOA = (function() {
 
     function setDebugMode(enabled) {
       Util.setClass(parent, 'cooa-debug', enabled);
+      parent.dispatchEvent(CustomEvent('cooadebugmodechange', {
+        bubbles: true,
+        cancelable: false,
+        detail: {story: self}
+      }));
     }
 
     function hookupDebugCheckbox(checkbox) {
@@ -147,6 +152,14 @@ var COOA = (function() {
       storage: storage
     };
 
+    Object.defineProperties(self, {
+      debugMode: {
+        get: function() { return parent.classList.contains('cooa-debug'); }
+      },
+      activeSection: {
+        get: function() { return $('section.cooa-active'); }
+      }
+    });
     highlightBrokenLinks();
     globalParent.addEventListener('mouseover', maybeUpdateLink, true);
     globalParent.addEventListener('touchstart', maybeUpdateLink, true);
@@ -160,6 +173,12 @@ var COOA = (function() {
       parent.dispatchEvent(changeEvent);
       if (changeEvent.defaultPrevented) e.preventDefault();
     }, true);
+    parent.dispatchEvent(CustomEvent('cooainit', {
+      bubbles: true,
+      cancelable: false,
+      detail: {story: self}
+    }));
+    setDebugMode(false);
     if (options.debugCheckbox) hookupDebugCheckbox(options.debugCheckbox);
 
     return self;
