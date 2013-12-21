@@ -107,6 +107,7 @@ var COOA = (function() {
       if (!newSection) return;
       if (oldSection) oldSection.classList.remove('cooa-active');
       newSection.classList.add('cooa-active');
+      self.hash = Hash.stringify(info);
       self.now = Object.freeze(info.now || {});
       self.next = JSON.parse(JSON.stringify(self.now));
       newSection.dispatchEvent(CustomEvent('cooasectionshow', {
@@ -147,6 +148,7 @@ var COOA = (function() {
     var self = {
       $: $,
       parent: parent,
+      hash: null,
       showSection: showSection,
       setDebugMode: setDebugMode,
       storage: storage
@@ -201,12 +203,20 @@ var COOA = (function() {
 
   var init = COOA.init = function init(story) {
     function initTopLevel() {
-      function showCurrentSection() {
-        story.showSection(window.location.hash);
-      }
+      var inHashChange = false;
 
-      window.addEventListener('hashchange', showCurrentSection, false);
-      showCurrentSection();
+      story.parent.addEventListener('cooasectionshow', function(e) {
+        if (!inHashChange) window.location.hash = story.hash;
+      });
+      window.addEventListener('hashchange', function() {
+        if (story.hash != window.location.hash) {
+          inHashChange = true;
+          try {
+            story.showSection(window.location.hash);
+          } finally { inHashChange = false; }
+        }
+      }, false);
+      story.showSection(window.location.hash);
     }
 
     function initEmbedded() {
@@ -215,9 +225,11 @@ var COOA = (function() {
       // We might be in jsbin or thimble or another two-pane editor,
       // which often handle named anchors poorly, so we'll handle
       // them ourselves.
+      story.parent.addEventListener('cooasectionshow', function(e) {
+        storage.set('cooa-hash', story.hash);
+      });
       story.parent.addEventListener('cooasectionlinkclick', function(e) {
         story.showSection(e.detail.href);
-        storage.set('cooa-hash', e.detail.href);
         e.preventDefault();
       }, false);
 
