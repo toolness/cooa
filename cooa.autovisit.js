@@ -37,8 +37,9 @@
 
       findSectionsToTrack().forEach(function(sectionID) {
         var prop = varName(sectionID);
+        var guiProp = 'now.' + prop;
 
-        Object.defineProperty(model, prop, {
+        Object.defineProperty(model, guiProp, {
           get: function() {
             return isSectionVisited(sectionID);
           },
@@ -48,7 +49,7 @@
             story.showSection(COOA.Hash.update(story.hash, updates));
           }
         });
-        controllers.push(gui.add(model, prop));
+        controllers.push(gui.add(model, guiProp));
       });
 
       parent.addEventListener('cooasectionshow', updateDisplays, false);
@@ -79,7 +80,7 @@
   }
 
   function varName(sectionID) {
-    return 'visited_' + sectionID;
+    return 'vis_' + sectionID;
   }
 
   document.documentElement.addEventListener('cooainit', function(e) {
