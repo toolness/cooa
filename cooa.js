@@ -72,7 +72,7 @@ var COOA = (function() {
     }
   };
 
-  var CustomEvent = function CustomEvent(type, params) {
+  var CustomEvent = COOA.CustomEvent = function CustomEvent(type, params) {
       params = params || {bubbles: false, cancelable: false};
       var event = document.createEvent('CustomEvent');
       event.initCustomEvent(type, params.bubbles, params.cancelable,
