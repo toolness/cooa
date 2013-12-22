@@ -92,6 +92,10 @@ test('Hash stringification works', function() {
 
 test('Hash.update works', function() {
   deepEqual(COOA.Hash.update('#foo', {now: {k: '1'}}), '#foo&now.k=1');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: undefined}}), '#foo');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: null}}), '#foo');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: {}}}), '#foo');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: 3}}), '#foo&now.k=3');
   deepEqual(COOA.Hash.update('#foo&now.k=2', {now: {k: '1'}}),
             '#foo&now.k=1');
   deepEqual(COOA.Hash.update('#foo', {section: 'lol'}), '#lol');

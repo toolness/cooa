@@ -54,6 +54,10 @@ var COOA = (function() {
       var nowNames = Object.keys(obj.now || {});
       var hash = '#' + obj.section;
 
+      nowNames = nowNames.filter(function(name) {
+        return ['string', 'number'].indexOf(typeof(obj.now[name])) >= 0;
+      });
+
       if (nowNames.length)
         hash += '&' + nowNames.map(function(name) {
           return encodeURIComponent('now.' + name) + '=' +
