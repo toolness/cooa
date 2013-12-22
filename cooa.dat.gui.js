@@ -27,9 +27,14 @@
     story.debugGUI = null;
     story.parent.addEventListener('cooadebugmodechange', function(e) {
       if (story.debugMode && !story.debugGUI) {
-        if (window.dat && window.dat.GUI) initGUI();
+        if (window.dat && window.dat.GUI) return initGUI();
         loadDatGUI(function() { if (story.debugMode) initGUI(); });
       } else if (!story.debugMode && story.debugGUI) {
+        story.parent.dispatchEvent(COOA.CustomEvent('cooadebugguishutdown', {
+          bubbles: true,
+          cancelable: false,
+          detail: {story: story}
+        }));
         story.debugGUI.destroy();
         story.debugGUI = null;
       }
@@ -37,15 +42,10 @@
   });
 
   html.addEventListener('cooadebugguiinit', function addSectionController(e) {
-    function updateModel() {
-      model.activeSection = story.activeSection.id;
-      if (controller) controller.updateDisplay();
-    }
-
     function getAvailableSections() {
       var sections = [];
-      for (var i = 0; i < story.parent.children.length; i++) {
-        var child = story.parent.children[i];
+      for (var i = 0; i < parent.children.length; i++) {
+        var child = parent.children[i];
         if (child.nodeName == 'SECTION' && child.id)
           sections.push(child.id);
       }
@@ -53,20 +53,26 @@
     }
 
     var story = e.detail.story;
+    var parent = story.parent;
     var gui = story.debugGUI;
     var sections = getAvailableSections();
-    var model = {
-      activeSection: story.activeSection ? story.activeSection.id : ''
-    };
-    var controller = null;
-
-    controller = gui.add(model, 'activeSection', sections);
-
-    controller.onFinishChange(function(value) {
-      story.showSection(COOA.Hash.update(story.hash, {
-        section: value
-      }));
+    var model = Object.create(Object.prototype, {
+      activeSection: {
+        get: function() {
+          return story.activeSection ? story.activeSection.id : '';
+        },
+        set: function(value) {
+          story.showSection(COOA.Hash.update(story.hash, {section: value}));
+        }
+      }
     });
-    story.parent.addEventListener('cooasectionshow', updateModel, false);
+    var controller = gui.add(model, 'activeSection', sections);
+    var updateModel = controller.updateDisplay.bind(controller);
+
+    parent.addEventListener('cooasectionshow', updateModel, false);
+    parent.addEventListener('cooadebugguishutdown', function remove() {
+      parent.removeEventListener('cooasectionshow', updateModel, false);
+      parent.removeEventListener('cooadebugguishutdown', remove, false);
+    }, false);
   });
 })();
