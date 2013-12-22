@@ -67,11 +67,11 @@
       }
     });
     var controller = gui.add(model, 'activeSection', sections);
-    var updateModel = controller.updateDisplay.bind(controller);
+    var updateDisplay = controller.updateDisplay.bind(controller);
 
-    parent.addEventListener('cooasectionshow', updateModel, false);
+    parent.addEventListener('cooasectionshow', updateDisplay, false);
     parent.addEventListener('cooadebugguishutdown', function remove() {
-      parent.removeEventListener('cooasectionshow', updateModel, false);
+      parent.removeEventListener('cooasectionshow', updateDisplay, false);
       parent.removeEventListener('cooadebugguishutdown', remove, false);
     }, false);
   });
