@@ -45,7 +45,7 @@
   }
 
   function varName(sectionID) {
-    return 'vis_' + sectionID;
+    return 'visited_' + sectionID;
   }
 
   document.documentElement.addEventListener('cooainit', function(e) {
