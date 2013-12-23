@@ -138,6 +138,47 @@ test('Util.setClass works', function() {
   ok(!el.classList.contains('lol'));
 });
 
+test('Schema works with numbers', function() {
+  var schema = COOA.Schema();
+
+  schema.define('foo', 'number', 5);
+
+  deepEqual(schema.parse(''), {foo: 5});
+  deepEqual(schema.parse('bar=1'), {foo: 5});
+  deepEqual(schema.parse('foo=2'), {foo: 2});
+  deepEqual(schema.parse('foo=lol'), {foo: 5});
+
+  equal(schema.stringify({foo: 5}), '');
+  equal(schema.stringify({foo: 6}), 'foo=6');
+});
+
+test('Schema works with strings', function() {
+  var schema = COOA.Schema();
+
+  schema.define('foo', 'string', 'lol');
+
+  deepEqual(schema.parse(''), {foo: 'lol'});
+  deepEqual(schema.parse('foo=2'), {foo: '2'});
+  deepEqual(schema.parse('foo='), {foo: ''});
+
+  equal(schema.stringify({foo: 'lol'}), '');
+  equal(schema.stringify({foo: 'oof'}), 'foo=oof');
+});
+
+test('Schema works with booleans', function() {
+  var schema = COOA.Schema();
+
+  schema.define('foo', 'boolean');
+
+  deepEqual(schema.parse(''), {foo: false});
+  deepEqual(schema.parse('bar=1'), {foo: false});
+  deepEqual(schema.parse('foo=2'), {foo: false});
+  deepEqual(schema.parse('foo=on'), {foo: false});
+
+  equal(schema.stringify({foo: false}), '');
+  equal(schema.stringify({foo: true}), 'foo=on');
+});
+
 test('Util.updateHashLink works', function() {
   var hashLink = document.createElement('a');
 
