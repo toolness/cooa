@@ -36,6 +36,75 @@ var COOA = (function() {
     }
   };
 
+  var Schema = COOA.Schema = function() {
+    var self = {};
+    var schema = {};
+
+    self.define = function(name, type, defaultValue) {
+      if (!(type in SchemaTypes)) throw new Error('unknown type: ' + type);
+      if (typeof(defaultValue) == 'undefined')
+        defaultValue = SchemaTypes[type].defaultDefaultValue;
+
+      schema[name] = {type: SchemaTypes[type], defaultValue: defaultValue};
+    };
+
+    self.parse = function(obj) {
+      var result = {};
+
+      Object.keys(schema).forEach(function(name) {
+        var def = schema[name];
+
+        if (name in obj) {
+          result[name] = def.type.parse(obj[name], def.defaultValue);
+        } else {
+          result[name] = def.defaultValue;
+        }
+      });
+
+      return result;
+    };
+
+    self.stringify = function(obj) {
+      var result = {};
+
+      Object.keys(schema).forEach(function(name) {
+        var def = schema[name];
+
+        if (name in obj && obj[name] != def.defaultValue)
+          result[name] = def.type.stringify(obj[name]);
+      });
+
+      return result;
+    };
+
+    return self;
+  };
+
+  var SchemaTypes = COOA.Schema.Types = {
+    'number': {
+      parse: function(str, defaultValue) {
+        var num = parseFloat(str);
+        return isNaN(num) ? defaultValue : num;
+      },
+      stringify: function(value) { return value.toString(); },
+      defaultDefaultValue: 0
+    },
+    'string': {
+      parse: function(str, defaultValue) { return str; },
+      stringify: function(value) { return value; },
+      defaultDefaultValue: ''
+    },
+    'boolean': {
+      parse: function(str, defaultValue) {
+        if (defaultValue === true && str == 'off') return false;
+        if (defaultValue === false && str == 'on') return true;
+        return defaultValue;
+      },
+      stringify: function(value) { return value ? 'on' : 'off'; },
+      defaultDefaultValue: false
+    }
+  };
+
   var Hash = COOA.Hash = {
     parse: function(str) {
       var pairs = (str ? str.slice(1) : '').split('&');

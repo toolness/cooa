@@ -143,13 +143,13 @@ test('Schema works with numbers', function() {
 
   schema.define('foo', 'number', 5);
 
-  deepEqual(schema.parse(''), {foo: 5});
-  deepEqual(schema.parse('bar=1'), {foo: 5});
-  deepEqual(schema.parse('foo=2'), {foo: 2});
-  deepEqual(schema.parse('foo=lol'), {foo: 5});
+  deepEqual(schema.parse({}), {foo: 5});
+  deepEqual(schema.parse({bar: '1'}), {foo: 5});
+  deepEqual(schema.parse({foo: '2'}), {foo: 2});
+  deepEqual(schema.parse({foo: 'lol'}), {foo: 5});
 
-  equal(schema.stringify({foo: 5}), '');
-  equal(schema.stringify({foo: 6}), 'foo=6');
+  deepEqual(schema.stringify({foo: 5}), {});
+  deepEqual(schema.stringify({foo: 6}), {foo: '6'});
 });
 
 test('Schema works with strings', function() {
@@ -157,26 +157,42 @@ test('Schema works with strings', function() {
 
   schema.define('foo', 'string', 'lol');
 
-  deepEqual(schema.parse(''), {foo: 'lol'});
-  deepEqual(schema.parse('foo=2'), {foo: '2'});
-  deepEqual(schema.parse('foo='), {foo: ''});
+  deepEqual(schema.parse({}), {foo: 'lol'});
+  deepEqual(schema.parse({foo: '2'}), {foo: '2'});
+  deepEqual(schema.parse({foo: ''}), {foo: ''});
 
-  equal(schema.stringify({foo: 'lol'}), '');
-  equal(schema.stringify({foo: 'oof'}), 'foo=oof');
+  deepEqual(schema.stringify({foo: 'lol'}), {});
+  deepEqual(schema.stringify({foo: 'oof'}), {foo: 'oof'});
 });
 
-test('Schema works with booleans', function() {
+test('Schema works with booleans that default to false', function() {
   var schema = COOA.Schema();
 
   schema.define('foo', 'boolean');
 
-  deepEqual(schema.parse(''), {foo: false});
-  deepEqual(schema.parse('bar=1'), {foo: false});
-  deepEqual(schema.parse('foo=2'), {foo: false});
-  deepEqual(schema.parse('foo=on'), {foo: false});
+  deepEqual(schema.parse({}), {foo: false});
+  deepEqual(schema.parse({bar: '1'}), {foo: false});
+  deepEqual(schema.parse({foo: '2'}), {foo: false});
+  deepEqual(schema.parse({foo: 'off'}), {foo: false});
+  deepEqual(schema.parse({foo: 'on'}), {foo: true});
 
-  equal(schema.stringify({foo: false}), '');
-  equal(schema.stringify({foo: true}), 'foo=on');
+  deepEqual(schema.stringify({foo: false}), {});
+  deepEqual(schema.stringify({foo: true}), {foo: 'on'});
+});
+
+test('Schema works with booleans that default to true', function() {
+  var schema = COOA.Schema();
+
+  schema.define('foo', 'boolean', true);
+
+  deepEqual(schema.parse({}), {foo: true});
+  deepEqual(schema.parse({bar: '1'}), {foo: true});
+  deepEqual(schema.parse({foo: '2'}), {foo: true});
+  deepEqual(schema.parse({foo: 'off'}), {foo: false});
+  deepEqual(schema.parse({foo: 'on'}), {foo: true});
+
+  deepEqual(schema.stringify({foo: false}), {foo: 'off'});
+  deepEqual(schema.stringify({foo: true}), {});
 });
 
 test('Util.updateHashLink works', function() {
