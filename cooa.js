@@ -171,7 +171,12 @@ var COOA = (function() {
     }
 
     function showSection(info) {
-      if (!info || typeof(info) != 'object') {
+      if (info && typeof(info) == 'object') {
+        info.section = info.section ||
+                       (self.activeSection ? self.activeSection.id : '');
+        info.now = Util.extend({}, self.now || schema.parse({}),
+                               info.now || {});
+      } else {
         info = Hash.parse(info);
         info.now = schema.parse(info.now);
       }

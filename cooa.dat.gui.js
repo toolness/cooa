@@ -59,12 +59,9 @@
           return story.now[name];
         },
         set: function(value) {
-          var newNow = JSON.parse(JSON.stringify(story.now));
-          newNow[name] = value;
-          story.showSection({
-            section: story.activeSection.id,
-            now: newNow
-          });
+          var changes = {};
+          changes[name] = value;
+          story.showSection({now: changes});
         }
       });
       controllers.push(story.debugGUI.add(model, guiName));
@@ -98,7 +95,7 @@
           return story.activeSection ? story.activeSection.id : '';
         },
         set: function(value) {
-          story.showSection(COOA.Hash.update(story.hash, {section: value}));
+          story.showSection({section: value});
         }
       }
     });

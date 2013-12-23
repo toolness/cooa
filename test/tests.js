@@ -79,6 +79,28 @@ test('Showing sections works', function() {
   ok(this.sample.querySelector('#a').classList.contains('cooa-active'));  
 });
 
+test('Passing objects to story.showSection() works', function() {
+  var story = COOA.Story({parent: this.sample});
+
+  story.schema.define('foo', 'number', 5);
+  story.showSection('#b');
+  equal(story.now.foo, 5);
+
+  story.showSection({now: {foo: 6}});
+  equal(story.activeSection.id, 'b');
+  equal(story.hash, '#b&foo=6');
+  equal(story.now.foo, 6);
+
+  story.showSection({section: 'a'});
+  equal(story.activeSection.id, 'a');
+  equal(story.hash, '#a&foo=6');
+  equal(story.now.foo, 6);
+
+  story.showSection({now: {foo: 5}});
+  equal(story.hash, '#a');
+  equal(story.now.foo, 5);
+});
+
 test('Hash parsing works', function() {
   deepEqual(COOA.Hash.parse('#foo'), {section: 'foo', now: {}});
   deepEqual(COOA.Hash.parse('#foo&k=1'), {section: 'foo', now: {k: '1'}});
