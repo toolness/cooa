@@ -79,6 +79,48 @@ test('Showing sections works', function() {
   ok(this.sample.querySelector('#a').classList.contains('cooa-active'));  
 });
 
+test('cooasectionshow is triggered only when state changes', function() {
+  var story = COOA.Story({parent: this.sample});
+  var showTriggered = false;
+
+  story.parent.addEventListener('cooasectionshow', function() {
+    showTriggered = true;
+  }, false);
+  story.schema.define('foo', 'number', 5);
+  story.schema.define('bar', 'boolean', false);
+
+  story.showSection('#b');
+  equal(showTriggered, true);
+  showTriggered = false;
+
+  story.showSection('#b');
+  equal(showTriggered, false);  
+
+  story.showSection('#b&foo=5');
+  equal(showTriggered, false);  
+
+  story.showSection('#b&bar=off');
+  equal(showTriggered, false);  
+
+  story.showSection('#b&bar=on');
+  equal(showTriggered, true);
+  showTriggered = false;
+
+  story.showSection('#b&foo=5&bar=on');
+  equal(showTriggered, false);
+
+  story.showSection('#b&bar=on&foo=5');
+  equal(showTriggered, false);
+
+  story.showSection('#b&foo=5');
+  equal(showTriggered, true);
+  showTriggered = false;
+
+  story.showSection('#a&foo=5');
+  equal(showTriggered, true);
+  showTriggered = false;
+});
+
 test('Passing objects to story.showSection() works', function() {
   var story = COOA.Story({parent: this.sample});
 

@@ -170,6 +170,16 @@ var COOA = (function() {
       }
     }
 
+    function isStateChanged(section, now) {
+      if (!section.classList.contains('cooa-active')) return true;
+      if (!self.now) return true;
+
+      for (var name in self.now)
+        if (self.now[name] !== now[name]) return true;
+
+      return false;
+    }
+
     function showSection(info) {
       if (info && typeof(info) == 'object') {
         info.section = info.section ||
@@ -183,7 +193,7 @@ var COOA = (function() {
       var oldSection = $('section.cooa-active');
       var newSection = $('section#' + info.section) || $('section');
 
-      if (!newSection) return;
+      if (!newSection || !isStateChanged(newSection, info.now)) return;
       if (oldSection) oldSection.classList.remove('cooa-active');
       newSection.classList.add('cooa-active');
       self.hash = Hash.stringify({
