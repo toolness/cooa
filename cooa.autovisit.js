@@ -1,7 +1,7 @@
 (function() {
   function Autovisit(story) {
     function isSectionVisited(sectionID) {
-      return story.now[varName(sectionID)] == 'on';
+      return story.now[varName(sectionID)];
     }
 
     function refresh() {
@@ -11,64 +11,29 @@
       });
     }
 
-    function shouldSectionBeTracked(id) {
-      var selector = '[data-show-if-visited="' + id + '"]';
-      return !!story.parent.querySelector(selector);
-    }
-
-    function addToDebugGUI() {
-      function updateDisplays() {
-        controllers.forEach(function(c) { c.updateDisplay(); });
-      }
-
-      function findSectionsToTrack() {
-        var sectionIDs = {};
-        findAll(parent, '[data-show-if-visited]').forEach(function(el) {
-          var sectionID = el.getAttribute('data-show-if-visited');
-          sectionIDs[sectionID] = true;
-        });
-        return Object.keys(sectionIDs);
-      }
-
-      var gui = story.debugGUI;
-      var parent = story.parent;
-      var model = {};
-      var controllers = [];
-
-      findSectionsToTrack().forEach(function(sectionID) {
-        var prop = varName(sectionID);
-        var guiProp = prop;
-
-        Object.defineProperty(model, guiProp, {
-          get: function() {
-            return isSectionVisited(sectionID);
-          },
-          set: function(value) {
-            var updates = {now: {}};
-            updates.now[prop] = value ? 'on' : undefined;
-            story.showSection(COOA.Hash.update(story.hash, updates));
-          }
-        });
-        controllers.push(gui.add(model, guiProp));
+    function findSectionsToTrack() {
+      var sectionIDs = {};
+      findAll(story.parent, '[data-show-if-visited]').forEach(function(el) {
+        var sectionID = el.getAttribute('data-show-if-visited');
+        sectionIDs[sectionID] = true;
       });
-
-      parent.addEventListener('cooasectionshow', updateDisplays, false);
-      parent.addEventListener('cooadebugguishutdown', function remove() {
-        parent.removeEventListener('cooasectionshow', updateDisplays, false);
-        parent.removeEventListener('cooadebugguishutdown', remove, false);
-      }, false);
+      return Object.keys(sectionIDs);
     }
+
+    var sectionsToTrack = findSectionsToTrack();
 
     story.parent.addEventListener('cooasectionshow', function(e) {
       var sectionID = e.target.id;
 
       refresh();
 
-      if (shouldSectionBeTracked(sectionID))
-        story.next[varName(sectionID)] = 'on';
+      if (sectionsToTrack.indexOf(sectionID) >= 0)
+        story.next[varName(sectionID)] = true;
     }, false);
 
-    story.parent.addEventListener('cooadebugguiinit', addToDebugGUI, false);
+    sectionsToTrack.forEach(function(sectionID) {
+      story.schema.define(varName(sectionID), 'boolean', false);
+    });
 
     return {
       refresh: refresh

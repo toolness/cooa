@@ -41,6 +41,42 @@
     });
   });
 
+  html.addEventListener('cooadebugguiinit', function addNowControllers(e) {
+    function updateDisplays() {
+      controllers.forEach(function(c) { c.updateDisplay(); });
+    }
+
+    var story = e.detail.story;
+    var parent = story.parent;
+    var controllers = [];
+    var model = {};
+
+    Object.keys(story.now).forEach(function(name) {
+      var guiName = name;
+
+      Object.defineProperty(model, guiName, {
+        get: function() {
+          return story.now[name];
+        },
+        set: function(value) {
+          var newNow = JSON.parse(JSON.stringify(story.now));
+          newNow[name] = value;
+          story.showSection({
+            section: story.activeSection.id,
+            now: newNow
+          });
+        }
+      });
+      controllers.push(story.debugGUI.add(model, guiName));
+    });
+
+    parent.addEventListener('cooasectionshow', updateDisplays, false);
+    parent.addEventListener('cooadebugguishutdown', function remove() {
+      parent.removeEventListener('cooasectionshow', updateDisplays, false);
+      parent.removeEventListener('cooadebugguishutdown', remove, false);
+    }, false);
+  });
+
   html.addEventListener('cooadebugguiinit', function addSectionController(e) {
     function getAvailableSections() {
       var sections = [];

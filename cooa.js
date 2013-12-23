@@ -171,14 +171,20 @@ var COOA = (function() {
     }
 
     function showSection(info) {
-      if (!info || typeof(info) != 'object') info = Hash.parse(info);
+      if (!info || typeof(info) != 'object') {
+        info = Hash.parse(info);
+        info.now = schema.parse(info.now);
+      }
       var oldSection = $('section.cooa-active');
       var newSection = $('section#' + info.section) || $('section');
 
       if (!newSection) return;
       if (oldSection) oldSection.classList.remove('cooa-active');
       newSection.classList.add('cooa-active');
-      self.hash = Hash.stringify(info);
+      self.hash = Hash.stringify({
+        section: info.section,
+        now: schema.stringify(info.now)
+      });
       self.now = Object.freeze(info.now || {});
       self.next = JSON.parse(JSON.stringify(self.now));
       newSection.dispatchEvent(CustomEvent('cooasectionshow', {
@@ -190,7 +196,7 @@ var COOA = (function() {
 
     function maybeUpdateLink(e) {
       if (!Util.isHashLink(e.target)) return;
-      Util.updateHashLink(e.target, {now: self.next});
+      Util.updateHashLink(e.target, {now: schema.stringify(self.next)});
     }
 
     function setDebugMode(enabled) {
@@ -216,10 +222,12 @@ var COOA = (function() {
     var parent = options.parent;
     var globalParent = options.globalParent || parent;
     var storage = options.storage || Storage({});
+    var schema = Schema();
     var self = {
       $: $,
       parent: parent,
       hash: null,
+      schema: schema,
       showSection: showSection,
       setDebugMode: setDebugMode,
       storage: storage
