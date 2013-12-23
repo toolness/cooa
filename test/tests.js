@@ -119,6 +119,9 @@ test('cooasectionshow is triggered only when state changes', function() {
   story.showSection('#a&foo=5');
   equal(showTriggered, true);
   showTriggered = false;
+
+  story.showSection('#a&lol=u');
+  equal(showTriggered, false);
 });
 
 test('Passing objects to story.showSection() works', function() {
