@@ -146,12 +146,12 @@ var COOA = (function() {
   };
 
   var CustomEvent = COOA.CustomEvent = function CustomEvent(type, params) {
-      params = params || {bubbles: false, cancelable: false};
-      var event = document.createEvent('CustomEvent');
-      event.initCustomEvent(type, params.bubbles, params.cancelable,
-                            params.detail);
-      return event;
-    };
+    params = params || {bubbles: false, cancelable: false};
+    var event = document.createEvent('CustomEvent');
+    event.initCustomEvent(type, params.bubbles, params.cancelable,
+                          params.detail);
+    return event;
+  };
 
   var Story = COOA.Story = function Story(options) {
     function $(selector) {
