@@ -37,7 +37,7 @@
 
       findSectionsToTrack().forEach(function(sectionID) {
         var prop = varName(sectionID);
-        var guiProp = 'now.' + prop;
+        var guiProp = prop;
 
         Object.defineProperty(model, guiProp, {
           get: function() {

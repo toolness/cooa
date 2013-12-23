@@ -113,9 +113,7 @@ var COOA = (function() {
         var parts = pair.split('=');
         if (parts.length != 2) return;
         var name = decodeURIComponent(parts[0]);
-        var nameMatch = name.match(/^now\.(.+)$/);
-        if (!nameMatch) return;
-        obj.now[nameMatch[1]] = decodeURIComponent(parts[1]);
+        obj.now[name] = decodeURIComponent(parts[1]);
       });
       return obj;
     },
@@ -129,7 +127,7 @@ var COOA = (function() {
 
       if (nowNames.length)
         hash += '&' + nowNames.map(function(name) {
-          return encodeURIComponent('now.' + name) + '=' +
+          return encodeURIComponent(name) + '=' +
                  encodeURIComponent(obj.now[name]);
         }).join('&');
 

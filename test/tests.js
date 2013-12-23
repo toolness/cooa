@@ -81,23 +81,22 @@ test('Showing sections works', function() {
 
 test('Hash parsing works', function() {
   deepEqual(COOA.Hash.parse('#foo'), {section: 'foo', now: {}});
-  deepEqual(COOA.Hash.parse('#foo&now.k=1'), {section: 'foo', now: {k: '1'}});
+  deepEqual(COOA.Hash.parse('#foo&k=1'), {section: 'foo', now: {k: '1'}});
 });
 
 test('Hash stringification works', function() {
   deepEqual(COOA.Hash.stringify({section: 'foo'}), '#foo');
   deepEqual(COOA.Hash.stringify({section: 'foo', now: {k: '1'}}),
-            '#foo&now.k=1');
+            '#foo&k=1');
 });
 
 test('Hash.update works', function() {
-  deepEqual(COOA.Hash.update('#foo', {now: {k: '1'}}), '#foo&now.k=1');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: '1'}}), '#foo&k=1');
   deepEqual(COOA.Hash.update('#foo', {now: {k: undefined}}), '#foo');
   deepEqual(COOA.Hash.update('#foo', {now: {k: null}}), '#foo');
   deepEqual(COOA.Hash.update('#foo', {now: {k: {}}}), '#foo');
-  deepEqual(COOA.Hash.update('#foo', {now: {k: 3}}), '#foo&now.k=3');
-  deepEqual(COOA.Hash.update('#foo&now.k=2', {now: {k: '1'}}),
-            '#foo&now.k=1');
+  deepEqual(COOA.Hash.update('#foo', {now: {k: 3}}), '#foo&k=3');
+  deepEqual(COOA.Hash.update('#foo&k=2', {now: {k: '1'}}), '#foo&k=1');
   deepEqual(COOA.Hash.update('#foo', {section: 'lol'}), '#lol');
 });
 
@@ -200,10 +199,10 @@ test('Util.updateHashLink works', function() {
 
   hashLink.setAttribute('href', '#foo');
   COOA.Util.updateHashLink(hashLink, {now: {k: '1'}});
-  equal(hashLink.getAttribute('href'), '#foo&now.k=1');
+  equal(hashLink.getAttribute('href'), '#foo&k=1');
   equal(hashLink.getAttribute('data-orig-href'), '#foo');
   COOA.Util.updateHashLink(hashLink, {now: {k: '2'}});
-  equal(hashLink.getAttribute('href'), '#foo&now.k=2');
+  equal(hashLink.getAttribute('href'), '#foo&k=2');
   equal(hashLink.getAttribute('data-orig-href'), '#foo');
 
   var resetLink = document.createElement('a');
