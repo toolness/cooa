@@ -5,7 +5,7 @@
     }
 
     function refresh() {
-      findAll(story.parent, '[data-show-if-visited]').forEach(function(el) {
+      story.$all('[data-show-if-visited]').forEach(function(el) {
         var sectionID = el.getAttribute('data-show-if-visited');
         COOA.Util.setClass(el, 'cooa-hidden', !isSectionVisited(sectionID));
       });
@@ -13,7 +13,7 @@
 
     function findSectionsToTrack() {
       var sectionIDs = {};
-      findAll(story.parent, '[data-show-if-visited]').forEach(function(el) {
+      story.$all('[data-show-if-visited]').forEach(function(el) {
         var sectionID = el.getAttribute('data-show-if-visited');
         sectionIDs[sectionID] = true;
       });
@@ -38,10 +38,6 @@
     return {
       refresh: refresh
     };
-  }
-
-  function findAll(element, selector) {
-    return [].slice.call(element.querySelectorAll(selector));
   }
 
   function varName(sectionID) {

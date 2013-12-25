@@ -10,6 +10,14 @@ module('COOA', {
   }
 });
 
+test('story.$all works', function() {
+  var story = COOA.Story({parent: this.sample});
+
+  ok(Array.isArray(story.$all('section')), 'array is returned');
+  ok(story.$all('section').length > 0, 'matching elements populate array');
+  ok(Array.isArray(story.$all('')), 'exceptions are caught');
+});
+
 test('Properties on story are properly exposed', function() {
   var story = COOA.Story({parent: this.sample});
 

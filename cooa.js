@@ -156,7 +156,13 @@ var COOA = (function() {
       try {
         return parent.querySelector(selector);
       } catch (e) { return null; }
-    };
+    }
+
+    function $all(selector) {
+      try {
+        return [].slice.call(parent.querySelectorAll(selector));
+      } catch (e) { return []; }
+    }
 
     function refresh() {
       highlightBrokenLinks();
@@ -166,12 +172,11 @@ var COOA = (function() {
       var links = parent.querySelectorAll('a[href^="#"]');
       var link, linkInfo;
 
-      for (var i = 0; i < links.length; i++) {
-        link = links[i];
+      $all('a[href^="#"]').forEach(function(link) {
         linkInfo = Hash.parse(link.getAttribute('href'));
         Util.setClass(link, 'cooa-broken', 
                       linkInfo.section && !$('section#' + linkInfo.section));
-      }
+      });
     }
 
     function isStateChanged(section, now) {
@@ -244,6 +249,7 @@ var COOA = (function() {
     var schema = Schema();
     var self = {
       $: $,
+      $all: $all,
       parent: parent,
       globalParent: globalParent,
       hash: null,
