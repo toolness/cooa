@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="../cooa.css">
+<title>COOA template example</title>
+<div class="cooa">  
+  <section id="start">
+    <h2>Page 1</h2>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <ul>
+      <li><a href="#page2">go to page 2</a></li>
+      <li><a href="#page3">go to unwritten page</a></li>
+      <li><a href="#page4">go to page 4</a></li>
+    </ul>
+  </section>
+  <script id="page2" type="text/html-section">
+    <h2>Page 2</h2>
+    <% if (visited_page4) { %>
+      <p>I see u have visited Page 4.</p>
+    <% } %>
+    <p>
+      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+    </p>
+  </script>
+  <script id="page4" type="text/html-section">
+    <h2>Page 4</h2>
+    <p>This is page 4.</p>
+    <% visited_page4 = true; %>
+    <a href="#start">back to page 1</a>
+  </script>
+</div>
+<footer>
+  [ <a href="#">restart story</a>
+    | <a href="#" onclick="TogetherJS(this); return false;">play
+        with friends</a>
+    | <input type="checkbox" id="cooa-debug"> 
+        <label for="cooa-debug">development mode</label>
+  ]
+</footer>
+<style>
+h2 {
+  font-weight: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+@media (max-width: 640px) {
+  body {
+    margin: 0 12px;
+  }
+}
+
+@media (min-width: 640px) {
+  body {
+    width: 616px;
+    margin: 0 auto;
+  }
+}
+
+body {
+  line-height: 1.5em;
+  font-family: Palatino, Georgia, serif;
+}
+
+footer {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px dotted gray;
+  font-size: x-small;
+  text-align: center;
+}
+
+footer input[type=checkbox] {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+section ul {
+  list-style-type: none;
+  padding: 0;
+}
+</style>
+<script src="../cooa.js"></script>
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
+<script src="../cooa.together.js"></script>
+<script src="../vendor/underscore.js"></script>
+<script src="../cooa.template.js"></script>
+<script src="../cooa.dat.gui.js"
+        data-datgui-href="../vendor/dat.gui.js"></script>
+<script>
+defaults = {
+  visited_page4: false
+};
+</script>
