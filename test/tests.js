@@ -42,6 +42,10 @@ test('Broken links are marked', function() {
   ok(!nonexistentLink.classList.contains('cooa-broken'));
   var story = COOA.Story({parent: this.sample});
   ok(nonexistentLink.classList.contains('cooa-broken'));
+
+  nonexistentLink.setAttribute('href', '#a');  
+  story.refresh();
+  ok(!nonexistentLink.classList.contains('cooa-broken'));
 });
 
 test('Debug mode works', function() {

@@ -158,6 +158,10 @@ var COOA = (function() {
       } catch (e) { return null; }
     };
 
+    function refresh() {
+      highlightBrokenLinks();
+    }
+
     function highlightBrokenLinks() {
       var links = parent.querySelectorAll('a[href^="#"]');
       var link, linkInfo;
@@ -165,8 +169,8 @@ var COOA = (function() {
       for (var i = 0; i < links.length; i++) {
         link = links[i];
         linkInfo = Hash.parse(link.getAttribute('href'));
-        if (linkInfo.section && !$('section#' + linkInfo.section))
-          link.classList.add('cooa-broken');
+        Util.setClass(link, 'cooa-broken', 
+                      linkInfo.section && !$('section#' + linkInfo.section));
       }
     }
 
@@ -244,6 +248,7 @@ var COOA = (function() {
       globalParent: globalParent,
       hash: null,
       schema: schema,
+      refresh: refresh,
       showSection: showSection,
       setDebugMode: setDebugMode,
       storage: storage
@@ -257,7 +262,7 @@ var COOA = (function() {
         get: function() { return $('section.cooa-active'); }
       }
     });
-    highlightBrokenLinks();
+    refresh();
     globalParent.addEventListener('mouseover', maybeUpdateLink, true);
     globalParent.addEventListener('touchstart', maybeUpdateLink, true);
     globalParent.addEventListener('click', function(e) {
