@@ -1,16 +1,18 @@
-.cooa.cooa-debug > section.cooa-active {
+.cooa.cooa-debug:not(.cooa-no-debug-x-ray) > section.cooa-active {
   background-color: lightyellow;
 }
 
-.cooa:not(.cooa-debug) > section:not(.cooa-active) {
+.cooa:not(.cooa-debug) > section:not(.cooa-active),
+.cooa.cooa-debug.cooa-no-debug-x-ray > section:not(.cooa-active) {
   display: none;
 }
 
-.cooa.cooa-debug .cooa-hidden {
+.cooa.cooa-debug:not(.cooa-no-debug-x-ray) .cooa-hidden {
   opacity: 0.5;
 }
 
-.cooa:not(.cooa-debug) .cooa-hidden {
+.cooa:not(.cooa-debug) .cooa-hidden,
+.cooa.cooa-debug.cooa-no-debug-x-ray .cooa-hidden {
   display: none;
 }
 
