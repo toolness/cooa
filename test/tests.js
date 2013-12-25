@@ -10,6 +10,13 @@ module('COOA', {
   }
 });
 
+test('Properties on story are properly exposed', function() {
+  var story = COOA.Story({parent: this.sample});
+
+  equal(story.parent, this.sample, 'parent is exposed');
+  equal(story.globalParent, this.sample, 'globalParent is exposed');
+});
+
 test('Storage works', function() {
   var now = Date.now();
   var store = {};

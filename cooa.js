@@ -241,6 +241,7 @@ var COOA = (function() {
     var self = {
       $: $,
       parent: parent,
+      globalParent: globalParent,
       hash: null,
       schema: schema,
       showSection: showSection,
