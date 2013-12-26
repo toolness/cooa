@@ -1,0 +1,43 @@
+h1, h2 {
+  font-weight: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+@media (max-width: 640px) {
+  body {
+    margin: 0 12px;
+  }
+}
+
+@media (min-width: 640px) {
+  body {
+    width: 616px;
+    margin: 0 auto;
+  }
+}
+
+body {
+  line-height: 1.5em;
+  font-family: Palatino, Georgia, serif;
+}
+
+footer {
+  margin-top: 2em;
+  padding-top: 1em;
+  border-top: 1px dotted gray;
+  font-size: x-small;
+  text-align: center;
+}
+
+footer input[type=checkbox] {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+section ul {
+  list-style-type: none;
+  padding: 0;
+}
