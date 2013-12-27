@@ -40,6 +40,15 @@
     story.refresh();
   }
 
+  function showError(section, error) {
+    if (window.console && window.console.error)
+      window.console.error(error);
+    section.innerHTML = '<div class="cooa-error">' + 
+                        '<h3>Template render error</h3>' +
+                        '<pre>' + _.escape(error.toString()) + '</pre>' +
+                        '</div>';
+  }
+
   document.documentElement.addEventListener('cooainit', function(e) {
     initTemplatedStory(e.detail.story);
   }, false);
@@ -53,8 +62,14 @@
     var renderEvent;
 
     if (!templateSource) return;
-    template = _.template(templateSource);
-    rendered = template(buildContext(story));
+
+    try {
+      template = _.template(templateSource);
+      rendered = template(buildContext(story));
+    } catch (e) {
+      return showError(section, e);
+    }
+
     renderEvent = COOA.CustomEvent('cooatemplaterender', {
       bubbles: true,
       cancelable: true,

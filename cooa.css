@@ -19,3 +19,10 @@
 .cooa a.cooa-broken {
   color: red;
 }
+
+.cooa .cooa-error {
+  font-family: sans-serif;
+  background-color: mistyrose;
+  border-left: 4px solid pink;
+  padding: 0 0.5em;
+}
