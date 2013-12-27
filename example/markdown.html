@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../cooa.css">
+<link rel="stylesheet" href="example.css">
+<title>COOA markdown example</title>
+<body>
+<script type="cooa">
+#start
+
+This is the beginning.
+
+* Go to [page 1](#page1).
+* Go to [unwritten](#unwritten).
+* Go to [page 4](#page4).
+
+#page1
+
+This is page 1.
+
+#page4
+
+This is page 4.
+
+</script>
+<footer>
+  [ <a href="#">restart story</a>
+    | <a href="#" onclick="TogetherJS(this); return false;">play
+        with friends</a>
+    | <input type="checkbox" id="cooa-debug"> 
+        <label for="cooa-debug">development mode</label>
+  ]
+</footer>
+<script src="../cooa.js"></script>
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
+<script src="../cooa.together.js"></script>
+<script src="../vendor/showdown.js"></script>
+<script src="../vendor/underscore.js"></script>
+<script src="../cooa.markdown.js"></script>
+<script src="../cooa.dat.gui.js"
+        data-datgui-href="../vendor/dat.gui.js"></script>
+</body>
