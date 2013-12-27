@@ -37,21 +37,34 @@
       initDefaults(story.schema, window.defaults);
     story.parent.classList.add('cooa-no-debug-x-ray');
     story.$all('script[type="text/html-section"]').forEach(initSection);
-    story.parent.addEventListener('cooasectionshow', function(e) {
-      var section = e.target;
-      var templateSource = section.getAttribute('data-template');
-      var template;
-
-      if (!templateSource) return;
-      template = _.template(templateSource);
-      section.innerHTML = template(buildContext(story));
-
-      story.refresh();
-    }, false);
     story.refresh();
   }
 
   document.documentElement.addEventListener('cooainit', function(e) {
     initTemplatedStory(e.detail.story);
+  }, false);
+
+  document.documentElement.addEventListener('cooasectionshow', function(e) {
+    var section = e.target;
+    var story = e.detail.story;
+    var templateSource = section.getAttribute('data-template');
+    var template;
+    var rendered;
+    var renderEvent;
+
+    if (!templateSource) return;
+    template = _.template(templateSource);
+    rendered = template(buildContext(story));
+    renderEvent = COOA.CustomEvent('cooatemplaterender', {
+      bubbles: true,
+      cancelable: true,
+      detail: {story: story, rendered: rendered}
+    });
+    section.dispatchEvent(renderEvent);
+
+    if (!renderEvent.defaultPrevented) {
+      section.innerHTML = rendered;
+      story.refresh();
+    }
   }, false);
 })(_);

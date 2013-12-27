@@ -4,22 +4,41 @@
 <link rel="stylesheet" href="example.css">
 <title>COOA markdown example</title>
 <body>
+<script>
+defaults = {
+  visited_page4: false
+};
+</script>
 <script type="cooa">
-#start
-
-This is the beginning.
-
-* Go to [page 1](#page1).
-* Go to [unwritten](#unwritten).
-* Go to [page 4](#page4).
-
 #page1
+Page 1
+------
 
 This is page 1.
 
+* Go to [page 2](#page2).
+* Go to [unwritten](#unwritten).
+* Go to [page 4](#page4).
+
+#page2
+Page 2
+------
+
+<% if (visited_page4) { %>
+  You have visited page 4.
+<% } %>
+
+This is page 2.
+
 #page4
+Page 4
+------
 
 This is page 4.
+
+<% visited_page4 = true; %>
+
+* Go back to [page 1](#page1).
 
 </script>
 <footer>
@@ -35,6 +54,7 @@ This is page 4.
 <script src="../cooa.together.js"></script>
 <script src="../vendor/showdown.js"></script>
 <script src="../vendor/underscore.js"></script>
+<script src="../cooa.template.js"></script>
 <script src="../cooa.markdown.js"></script>
 <script src="../cooa.dat.gui.js"
         data-datgui-href="../vendor/dat.gui.js"></script>

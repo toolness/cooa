@@ -16,7 +16,7 @@
     var section = document.createElement('section');
 
     section.setAttribute('id', info.id);
-    section.setAttribute('data-markdown', info.source);
+    section.setAttribute('data-template', info.source);
 
     return section;
   }
@@ -33,7 +33,6 @@
         story.setAttribute(attr.nodeName, attr.value);
     });
     story.classList.add('cooa');
-    story.classList.add('cooa-no-debug-x-ray');
 
     splitSections(cooa.textContent).forEach(function(section) {
       story.appendChild(makeSection(section));
@@ -42,17 +41,16 @@
     cooa.parentNode.replaceChild(story, cooa);
   }
 
-  document.documentElement.addEventListener('cooasectionshow', function(e) {
+  var html = document.documentElement;
+
+  html.addEventListener('cooatemplaterender', function(e) {
     var story = e.detail.story;
     var section = e.target;
-    var markdown = e.target.getAttribute('data-markdown');
-
-    if (!markdown) return;
-
     var converter = new Showdown.converter();
-    section.innerHTML = converter.makeHtml(markdown);
 
+    section.innerHTML = converter.makeHtml(e.detail.rendered);
     story.refresh();
+    e.preventDefault();
   }, false);
 
   init();
