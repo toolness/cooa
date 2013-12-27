@@ -1,6 +1,6 @@
 (function() {
   function splitSections(markdown) {
-    var rawSections = markdown.split(/^#([A-Za-z0-9_\-]+)/m);
+    var rawSections = markdown.split(/^SECTION:\s*([A-Za-z0-9_\-]+)/m);
     var sections = [];
 
     for (var i = 1; i < rawSections.length; i += 2)
