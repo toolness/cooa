@@ -59,7 +59,6 @@
     var templateSource = section.getAttribute('data-template');
     var template;
     var rendered;
-    var renderEvent;
 
     if (!templateSource) return;
 
@@ -70,14 +69,11 @@
       return showError(section, e);
     }
 
-    renderEvent = COOA.CustomEvent('cooatemplaterender', {
+    if (section.dispatchEvent(COOA.CustomEvent('cooatemplaterender', {
       bubbles: true,
       cancelable: true,
       detail: {story: story, rendered: rendered}
-    });
-    section.dispatchEvent(renderEvent);
-
-    if (!renderEvent.defaultPrevented) {
+    }))) {
       section.innerHTML = rendered;
       story.refresh();
     }

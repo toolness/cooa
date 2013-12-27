@@ -273,13 +273,11 @@ var COOA = (function() {
     globalParent.addEventListener('touchstart', maybeUpdateLink, true);
     globalParent.addEventListener('click', function(e) {
       if (!Util.isHashLink(e.target)) return;
-      var changeEvent = CustomEvent('cooasectionlinkclick', {
+      if (!parent.dispatchEvent(CustomEvent('cooasectionlinkclick', {
         bubbles: false,
         cancelable: true,
         detail: {href: e.target.getAttribute('href')}
-      });
-      parent.dispatchEvent(changeEvent);
-      if (changeEvent.defaultPrevented) e.preventDefault();
+      }))) e.preventDefault();
     }, true);
     parent.dispatchEvent(CustomEvent('cooainit', {
       bubbles: true,
