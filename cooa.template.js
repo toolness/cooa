@@ -1,4 +1,4 @@
-(function(_) {
+COOA.Template = (function(_) {
   function initDefaults(schema, defaults) {
     Object.keys(defaults).forEach(function(name) {
       schema.define(name, typeof(defaults[name]), defaults[name]);
@@ -40,14 +40,17 @@
     story.refresh();
   }
 
-  function showError(section, error) {
+  function showError(section, error, name) {
+    name = name || 'Template render error';
     if (window.console && window.console.error)
       window.console.error(error);
     section.innerHTML = '<div class="cooa-error">' + 
-                        '<h3>Template render error</h3>' +
+                        '<h3>' + _.escape(name) + '</h3>' +
                         '<pre>' + _.escape(error.toString()) + '</pre>' +
                         '</div>';
   }
+
+  var compileTemplate = _.template.bind(_);
 
   document.documentElement.addEventListener('cooainit', function(e) {
     initTemplatedStory(e.detail.story);
@@ -63,7 +66,7 @@
     if (!templateSource) return;
 
     try {
-      template = _.template(templateSource);
+      template = compileTemplate(templateSource);
       rendered = template(buildContext(story));
     } catch (e) {
       return showError(section, e);
@@ -78,4 +81,9 @@
       story.refresh();
     }
   }, false);
+
+  return {
+    compile: compileTemplate,
+    showError: showError
+  };
 })(_);
