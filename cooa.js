@@ -1,3 +1,5 @@
+// Dependencies: none
+
 var COOA = (function() {
   var COOA = {story: null, autorun: true};
 

@@ -1,3 +1,5 @@
+// Dependencies: cooa.js, cooa.template.js, vendor/showdown.js
+
 (function() {
   function splitSections(markdown) {
     var rawSections = markdown.split(/^SECTION:\s*([A-Za-z0-9_\-]+)/m);

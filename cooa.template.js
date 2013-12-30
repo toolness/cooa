@@ -1,3 +1,5 @@
+// Dependencies: cooa.js, vendor/underscore.js
+
 COOA.Template = (function(_) {
   function initDefaults(schema, defaults) {
     Object.keys(defaults).forEach(function(name) {

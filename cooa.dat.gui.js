@@ -1,3 +1,5 @@
+// Dependencies: cooa.js, vendor/dat.gui.js
+
 (function() {
   function loadDatGUI(cb) {
     var dgScript = document.createElement('script');

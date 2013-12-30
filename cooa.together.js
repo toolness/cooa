@@ -1,7 +1,11 @@
+// Dependencies: cooa.js
+
 (function() {
   function sendCurrentHash() {
     TogetherJS.send({type: 'cooa.hashchange', hash: location.hash});
   }
+
+  if (typeof(TogetherJS) == 'undefined') return;
 
   TogetherJS.on('ready', function() {
     // TODO: This isn't efficient because we don't check to see if

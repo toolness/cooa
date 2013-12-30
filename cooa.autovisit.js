@@ -1,3 +1,5 @@
+// Dependencies: cooa.js
+
 (function() {
   function Autovisit(story) {
     function isSectionVisited(sectionID) {
