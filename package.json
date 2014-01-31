@@ -1,0 +1,21 @@
+{
+  "name": "cooa",
+  "version": "0.0.1",
+  "description": "COOA is a web-based microframework that makes it possible to collaboratively author and play hypertext narratives.",
+  "dependencies": {
+    "cheerio": "~0.13.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/toolness/cooa.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/toolness/cooa/issues"
+  }
+}
