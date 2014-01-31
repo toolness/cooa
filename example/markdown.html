@@ -7,40 +7,61 @@
 <script type="cooa">
 <%
   // Initial values for story variables.
-  visited_page4 = false;
+  switch_flipped = false;
 %>
 
-SECTION: page1
-Page 1
+SECTION: anteroom
+The Anteroom
 ------
 
-This is page 1.
+You are in a spartan room. There is an iron door to the north and
+a pink door to the west.
 
-* Go to [page 2](#page2).
-* Go to [unwritten](#unwritten).
-* Go to [page 4](#page4).
+* Go through the [iron door](#iron_room).
+* Go through the [pink door](#pink_room).
 
-SECTION: page2
-Page 2
+SECTION: iron_room
+The Iron Room
 ------
 
-<% if (visited_page4) { %>
-  You have visited page 4.
+This is a sparse iron room.
+
+<% if (switch_flipped) { %>
+  A massive iron door stands ajar to reveal a passage [north](#vault).
+<% } else { %>
+  A massive iron door with no handle seals the north side of the room.
 <% } %>
 
-This is page 2.
+* Go back to [the anteroom](#anteroom).
 
-SECTION: page4
-Page 4
+SECTION: pink_room
+The Pink Room
 ------
 
-This is page 4.
+You are in a gaudy pink room.
 
-<% visited_page4 = true; %>
+A switch is here. It is currently <%= switch_flipped ? "on" : "off" %>,
+but you can [flip it](#flip_switch).
 
-* Go back to [page 1](#page1).
+* Go back to [the anteroom](#anteroom).
 
-</script>
+SECTION: flip_switch
+
+<% if (!switch_flipped) { switch_flipped = true; %>
+  You hear a rumbling coming from another room as you flip the switch on,
+  like a giant door being swung open.
+<% } else { switch_flipped = false; %>
+  You hear a soft grinding noise as you flip the switch off, like a
+  giant door being slammed shut.
+<% } %>
+
+[Continue](#pink_room).
+
+SECTION: vault
+
+You are in a big vault with lots of money in it!
+
+## THE END</script>
 <footer>
   [ <a href="#">restart story</a>
     | <a href="#" onclick="TogetherJS(this); return false;">play
